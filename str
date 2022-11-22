@@ -1,0 +1,105 @@
+import java.util.Arrays;
+
+public class str {
+    public static void main(String[] args) {
+        String string = "Object-oriented programming is a programming language model organized around objects rather than " +
+                "\"actions\" and data rather than logic. Object-oriented programming blabla. " +
+                "Object-oriented programming bla";
+
+        System.out.println("Итоговая строка с заменой на ООП каждого второго вхождения: ");
+        System.out.println(replaceEachOther(string, "Object-oriented programming", "OOP"));
+
+
+        System.out.println("Слово с минимальным количеством различных символов:" + minNumUnicueLetters(string));
+
+        System.out.println("Количество слов, содержащих только символы Латинского алфавита = " + numWordsLatinChars(string));
+
+        System.out.println("Слова - палиндромы:");
+        Palindroms(string);
+
+    }
+    public static String replaceEachOther(String str, String word, String replacement) {
+        word = "\\Q" + word + "\\E";
+        return str.replaceAll("(?siu)(" + word +".*?)" + word, "$1" + replacement);
+    }
+    public static Integer numUnicueLetters(String[] letters){
+        Arrays.sort(letters);
+        Integer numUnicueLetters = 0;
+        char unicueLetter = ' ';
+        char letter;
+        for (int i = 0; i < letters.length; i++) {
+            letter = letters[i].charAt(0);
+            if (letter != unicueLetter) {
+                numUnicueLetters += 1;
+                unicueLetter = letter;
+            }
+        }
+        return numUnicueLetters;
+    }
+    public static String minNumUnicueLetters(String string) {
+        String[] words = string.split(" ");
+
+        Integer minUnicueLetterIndex = 0;
+        Integer num, minNum = 2147483647;
+
+        for (int i = 0; i < words.length; i++){
+
+            String[] letters;
+            letters = words[i].split("");
+            num = numUnicueLetters(letters);
+
+            if (minNum > num) {
+                minNum = num;
+                minUnicueLetterIndex = i;
+            }
+        }
+        return words[minUnicueLetterIndex];
+    }
+
+    public static Integer numWordsLatinChars(String string) {
+
+        String[] words = string.split(" ");
+        Integer number = 0;
+        for (int i = 0; i < words.length; i++) {
+
+            String[] letters = words[i].split("");
+            Integer AsciiChar;
+            Boolean isLatin;
+            isLatin = false;
+            for (int j = 0; j < letters.length; j++) {
+                AsciiChar = (int) letters[j].charAt(0);
+                if ( ((AsciiChar > 64) & (AsciiChar < 91)) | ((AsciiChar > 96) & (AsciiChar < 123))){
+                    isLatin = true;
+                }else {
+                    isLatin = false;
+                    break;
+                }
+            }
+            if (isLatin == true) {
+                number += 1;
+            }
+        }
+        return number;
+    }
+
+    public static void Palindroms(String string) {
+        String[] words = string.split(" ");
+        for (int i = 0; i < words.length; i++) {
+            String[] letters = words[i].split("");
+            Integer len = letters.length;
+            Integer t = 1;
+            Boolean isPalindrom = true;
+            for (int j = 0; j < letters.length / 2; j++) {
+                if (letters[j].charAt(0) == letters[len - t].charAt(0)) {
+                    t += 1;
+                } else {
+                    isPalindrom = false;
+                }
+            }
+            if (isPalindrom == true) {
+                System.out.print(words[i] + ", ");
+            }
+        }
+    }
+
+}
